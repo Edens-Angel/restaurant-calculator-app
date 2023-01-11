@@ -1,31 +1,34 @@
-import { StyleSheet, Text, View, Alert, NativeModules } from "react-native";
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useState } from "react";
+import { Text } from "react-native";
 import { DataTable } from "react-native-paper";
-import {
-  menuContext,
-  MenuOptions,
-  MenuStateItem,
-} from "../providers/MenuProvider";
+import { menuContext, MenuOptions, Order } from "../providers/MenuProvider";
 import { keyLabelMapper } from "../util/MenuItem.util";
 import EditModal from "./EditModal";
 import { formatToPeso } from "../util/general.util";
 
 interface Column {
+  key: MenuOptions;
   value: string;
 }
 
 interface ListItemProps {
-  item: MenuStateItem;
+  item: Order;
 }
 
 const ListItem: FC<ListItemProps> = ({ item }) => {
-  const { updatePrice } = useContext(menuContext);
+  const { updatePrice, getPriceFromKey } = useContext(menuContext);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [modalTextInput, setModalTextInput] = useState<string>("");
 
   const columns: Column[] = [
-    { value: keyLabelMapper(item.key).substring(0, item.key.length) },
-    { value: formatToPeso(item.price) },
+    {
+      key: item.key,
+      value: keyLabelMapper(item.key).substring(0, item.key.length),
+    },
+    {
+      key: item.key,
+      value: formatToPeso(getPriceFromKey(item.key)),
+    },
   ];
 
   const handleClick = () => {
@@ -50,10 +53,6 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
     setIsVisible(false);
   };
 
-  useEffect(() => {
-    console.log(modalTextInput);
-  }, [modalTextInput]);
-
   return (
     <DataTable>
       <DataTable.Row style={{ height: 70 }} onPress={handleClick}>
@@ -65,11 +64,12 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
             <Text>{`${col.value}`}</Text>
             <EditModal
               title="Edit price"
+              subTitle={keyLabelMapper(col.key)}
               onCancel={() => setIsVisible(false)}
               onSubmit={() => handleSubmit(item.key, modalTextInput)}
               visible={isVisible}
               setTextInput={setModalTextInput}
-              placeholder={item.price.toString()}
+              placeholder={col.value}
             />
           </DataTable.Cell>
         ))}
@@ -79,5 +79,3 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
 };
 
 export default ListItem;
-
-const styles = StyleSheet.create({});

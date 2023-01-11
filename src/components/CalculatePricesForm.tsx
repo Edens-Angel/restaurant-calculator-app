@@ -7,12 +7,12 @@ import { menuContext } from "../providers/MenuProvider";
 import { isValidNumberString } from "../util/general.util";
 
 const CalculatePricesForm = (): JSX.Element => {
-  const { menuItems, updateAmount, calculatePrice } = useContext(menuContext);
+  const { order, updateAmount, calculatePrice } = useContext(menuContext);
 
   return (
     <TouchableWithoutFeedback>
       <>
-        {menuItems.map(({ key, price, amount }) => (
+        {order.map(({ key, amount }) => (
           <View key={key} style={styles.calculateItemView}>
             <CTextInput
               viewStyle={styles.viewStyle}
@@ -29,7 +29,7 @@ const CalculatePricesForm = (): JSX.Element => {
             <OutputValue
               isPesoValuta={true}
               style={styles.outputValueStyle}
-              value={amount > 0 ? calculatePrice(price, amount) : 0}
+              value={amount > 0 ? calculatePrice(key, amount) : 0}
             />
           </View>
         ))}

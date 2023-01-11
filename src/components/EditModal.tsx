@@ -3,6 +3,7 @@ import Dialog from "react-native-dialog";
 
 interface ModalProps {
   title: string;
+  subTitle?: string;
   visible: boolean;
   placeholder: string;
   onCancel: () => void;
@@ -12,6 +13,7 @@ interface ModalProps {
 
 const EditModal: FC<ModalProps> = ({
   title,
+  subTitle,
   visible,
   placeholder,
   onCancel,
@@ -21,6 +23,7 @@ const EditModal: FC<ModalProps> = ({
   return (
     <Dialog.Container visible={visible}>
       <Dialog.Title>{title}</Dialog.Title>
+      <Dialog.Title>{subTitle}</Dialog.Title>
       <Dialog.Input
         onChange={(e) => setTextInput && setTextInput(e.nativeEvent.text)}
         keyboardType="numeric"

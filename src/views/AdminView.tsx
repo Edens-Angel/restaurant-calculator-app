@@ -4,7 +4,7 @@ import AdminMenuTable from "../components/AdminMenuTable";
 import { menuContext } from "../providers/MenuProvider";
 
 const AdminView = () => {
-  const { menuItems } = useContext(menuContext);
+  const { currentMenu: menuItems } = useContext(menuContext);
   return (
     <View>
       <AdminMenuTable data={menuItems} />

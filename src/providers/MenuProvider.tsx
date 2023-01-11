@@ -1,17 +1,22 @@
+import { isEqual } from "lodash";
 import React, {
   createContext,
   PropsWithChildren,
   useEffect,
   useState,
 } from "react";
-import { defaultFoodPrices as defaultFoodPriceDefinitions } from "../definitions/foodPrices";
+import { baseMenuItems } from "../definitions/foodPricesDefinitions";
+import { getAsyncItem, setAsyncItem } from "../services/async-storage.service";
+import { isMenuItemTypeArray } from "../util/general.util";
 
 interface MenuContextProps {
-  menuItems: MenuStateItem[];
+  currentMenu: MenuItem[];
+  order: Order[];
   totalPrice: number;
+  getPriceFromKey: (key: MenuOptions) => number;
   updateAmount: (key: MenuOptions, amount: number) => void;
   updatePrice: (key: MenuOptions, price: number) => void;
-  calculatePrice: (price: number, amount: number) => number;
+  calculatePrice: (Key: MenuOptions, amount: number) => number;
 }
 
 export type MenuOptions =
@@ -21,15 +26,21 @@ export type MenuOptions =
   | "TORTA"
   | "BEBIDA";
 
-export interface MenuStateItem {
+export interface MenuItem {
   key: MenuOptions;
   price: number;
+}
+
+export interface Order {
+  key: MenuOptions;
   amount: number;
 }
 
 const defaultValues: MenuContextProps = {
-  menuItems: [],
+  currentMenu: [],
+  order: [],
   totalPrice: 0,
+  getPriceFromKey: () => 0,
   updateAmount: () => undefined,
   updatePrice: () => undefined,
   calculatePrice: () => 0,
@@ -38,49 +49,69 @@ const defaultValues: MenuContextProps = {
 const menuContext = createContext<MenuContextProps>(defaultValues);
 
 const MenuProvider = (props: PropsWithChildren) => {
-  const { taco, quesadilla, gordita, torta, bebida } =
-    defaultFoodPriceDefinitions;
-  const [totalPrice, setTotalPrice] = useState<number>(
-    defaultValues.totalPrice
+  const { totalPrice: defaultTotalPrice } = defaultValues;
+  const [currentMenu, setCurrentMenu] = useState<MenuItem[]>(baseMenuItems);
+  const [order, setOrder] = useState<Order[]>(
+    baseMenuItems.map((item) => ({ ...item, amount: 0 }))
   );
-  const [menuItems, setMenuItems] = useState<MenuStateItem[]>([
-    { key: "TACO", price: taco, amount: 0 },
-    { key: "GORDITA", price: gordita, amount: 0 },
-    { key: "TORTA", price: torta, amount: 0 },
-    { key: "QUESADILLA", price: quesadilla, amount: 0 },
-    { key: "BEBIDA", price: bebida, amount: 0 },
-  ]);
+  const [totalPrice, setTotalPrice] = useState<number>(defaultTotalPrice);
 
-  const reduceFunction = (prev, curr) =>
-    prev + calculatePrice(curr.price, curr.amount);
+  const calculatePrice = (key: MenuOptions, amount) =>
+    (currentMenu.find((e) => e.key === key)?.price ?? 0) * amount;
+
+  const calculateTotalPriceFromOrder = (prev, curr) =>
+    prev + calculatePrice(curr.key, curr.amount);
   0;
 
+  const getPriceFromKey = (key: MenuOptions) =>
+    currentMenu.find((e) => e.key === key)?.price ?? 0;
+
   const updateAmount = (key: MenuOptions, amount: number): void =>
-    setMenuItems((prev) =>
+    setOrder((prev) =>
       prev.map((item) => (item.key === key ? { ...item, amount } : item))
     );
 
   const updatePrice = (key: MenuOptions, price: number): void =>
-    setMenuItems((prev) =>
+    setCurrentMenu((prev) =>
       prev.map((item) => (item.key === key ? { ...item, price: price } : item))
     );
 
-  const calculatePrice = (price: number, amount: number) => price * amount;
+  // order price not getting updated when menuprice does (usememo?)
+  useEffect(() => {
+    const storedMenuItems = getAsyncItem("localStoredMenuPrices");
+
+    storedMenuItems.then((data) => {
+      if (!data) {
+        if (!isEqual(baseMenuItems, currentMenu)) {
+          setAsyncItem("localStoredMenuPrices", JSON.stringify(currentMenu));
+        }
+      } else {
+        const parsedStoredMenuItems = JSON.parse(data);
+
+        if (
+          isMenuItemTypeArray(
+            parsedStoredMenuItems &&
+              !isEqual(parsedStoredMenuItems, currentMenu)
+          )
+        ) {
+          setCurrentMenu(parsedStoredMenuItems);
+        }
+      }
+    });
+  }),
+    [currentMenu];
 
   useEffect(() => {
-    setTotalPrice(menuItems.reduce(reduceFunction, 0));
-
-    // check if the value of the current state is different from definitions
-    // save to localstorage
-    // check which storage you want to use, async?
-    const foodDefinitionPriceArray = Object.values(defaultFoodPriceDefinitions);
-  }, [menuItems]);
+    setTotalPrice(order ? order.reduce(calculateTotalPriceFromOrder, 0) : 0);
+  }, [order, currentMenu]);
 
   return (
     <menuContext.Provider
       value={{
-        menuItems,
+        currentMenu,
+        order,
         totalPrice,
+        getPriceFromKey,
         updateAmount,
         updatePrice,
         calculatePrice,
