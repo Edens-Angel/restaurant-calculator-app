@@ -1,5 +1,4 @@
 import React from "react";
-import { View } from "react-native";
 import NavigationTabMenu from "./src/components/NavigationTabMenu";
 import { MenuProvider } from "./src/providers/MenuProvider";
 import { ThemeProvider } from "./src/providers/ThemeProvider";

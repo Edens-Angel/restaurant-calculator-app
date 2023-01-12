@@ -23,14 +23,16 @@ const EditModal: FC<ModalProps> = ({
   return (
     <Dialog.Container visible={visible}>
       <Dialog.Title>{title}</Dialog.Title>
-      <Dialog.Title>{subTitle}</Dialog.Title>
+      <Dialog.Title style={{ textDecorationLine: "underline" }}>
+        {subTitle}
+      </Dialog.Title>
       <Dialog.Input
         onChange={(e) => setTextInput && setTextInput(e.nativeEvent.text)}
         keyboardType="numeric"
         placeholder={placeholder}
       />
-      <Dialog.Button onPress={onCancel} color="red" label="Cancel" />
-      <Dialog.Button onPress={onSubmit} label="Submit" />
+      <Dialog.Button onPress={onCancel} color="red" label="Cancelar" />
+      <Dialog.Button onPress={onSubmit} label="Cambiar" />
     </Dialog.Container>
   );
 };

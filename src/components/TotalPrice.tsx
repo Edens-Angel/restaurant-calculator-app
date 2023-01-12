@@ -9,7 +9,7 @@ interface TotalPriceProps {
 const TotalPrice: FC<TotalPriceProps> = ({ value }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.textStyle}>TotalPrice</Text>
+      <Text style={styles.textStyle}>Precio total</Text>
       <OutputValue isPesoValuta={true} value={value} />
     </View>
   );

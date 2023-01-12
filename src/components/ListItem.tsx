@@ -63,7 +63,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
           >
             <Text>{`${col.value}`}</Text>
             <EditModal
-              title="Edit price"
+              title="Editar precio"
               subTitle={keyLabelMapper(col.key)}
               onCancel={() => setIsVisible(false)}
               onSubmit={() => handleSubmit(item.key, modalTextInput)}

@@ -15,7 +15,7 @@ const Tab = createMaterialBottomTabNavigator();
 const NavigationTabMenu = () => {
   const tabs: TabScreenProps[] = [
     { name: "Home", component: HomeView, iconName: "home" },
-    { name: "Configuracíon", component: AdminView, iconName: "cog-outline" },
+    { name: "configuración", component: AdminView, iconName: "cog-outline" },
   ];
 
   return (

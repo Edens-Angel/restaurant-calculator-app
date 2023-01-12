@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "last-carnitas-isabeles-precio-calculator",
+    "name": "Carnitas Calculator",
     "slug": "last-carnitas-isabeles-precio-calculator",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,10 +22,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.paer12.lastcarnitasisabelespreciocalculator"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b094075a-359a-4df6-8808-60895af0d93a"
+      }
     }
   }
 }
