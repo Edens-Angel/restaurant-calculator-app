@@ -4,10 +4,10 @@ import AdminMenuTable from "../components/AdminMenuTable";
 import { menuContext } from "../providers/MenuProvider";
 
 const AdminView = () => {
-  const { currentMenu: menuItems } = useContext(menuContext);
+  const { order } = useContext(menuContext);
   return (
     <View>
-      <AdminMenuTable data={menuItems} />
+      <AdminMenuTable data={order} />
     </View>
   );
 };

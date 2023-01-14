@@ -24,7 +24,9 @@ export type MenuOptions =
   | "GORDITA"
   | "QUESADILLA"
   | "TORTA"
-  | "BEBIDA";
+  | "BEBIDA-S"
+  | "BEBIDA-M"
+  | "BEBIDA-L";
 
 export interface MenuItem {
   key: MenuOptions;
@@ -76,7 +78,6 @@ const MenuProvider = (props: PropsWithChildren) => {
       prev.map((item) => (item.key === key ? { ...item, price: price } : item))
     );
 
-  // order price not getting updated when menuprice does (usememo?)
   useEffect(() => {
     const storedMenuItems = getAsyncItem("localStoredMenuPrices");
 

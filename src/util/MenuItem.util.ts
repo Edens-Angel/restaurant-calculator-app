@@ -10,9 +10,16 @@ export const keyLabelMapper = (key: MenuOptions): string => {
       return "Tortas";
     case "QUESADILLA":
       return "Quesadillas";
-    case "BEBIDA":
-      return "Bebidas";
+    case "BEBIDA-S":
+      return "Refresco (355ml)";
+    case "BEBIDA-M":
+      return "Refresco (600ml)";
+    case "BEBIDA-L":
+      return "Refresco (2.5l)";
     default:
       return "";
   }
 };
+
+export const removePluralText = (string: string): string =>
+  string.endsWith("s") ? string.substring(0, string.length - 1) : string;

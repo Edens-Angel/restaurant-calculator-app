@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import CalculatePricesForm from "../components/CalculatePricesForm";
 import TotalPrice from "../components/TotalPrice";
 import { menuContext } from "../providers/MenuProvider";
@@ -33,15 +33,17 @@ const HomeView = () => {
   });
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Calculadora de precios</Text>
-      <View style={styles.form}>
-        <CalculatePricesForm />
-        <View style={styles.totalPriceContainer}>
-          <TotalPrice value={totalPrice} />
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.header}>Calculadora de precios</Text>
+        <View style={styles.form}>
+          <CalculatePricesForm />
+          <View style={styles.totalPriceContainer}>
+            <TotalPrice value={totalPrice} />
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

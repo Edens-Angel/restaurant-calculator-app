@@ -2,7 +2,7 @@ import React, { FC, useContext, useState } from "react";
 import { Text } from "react-native";
 import { DataTable } from "react-native-paper";
 import { menuContext, MenuOptions, Order } from "../providers/MenuProvider";
-import { keyLabelMapper } from "../util/MenuItem.util";
+import { keyLabelMapper, removePluralText } from "../util/MenuItem.util";
 import EditModal from "./EditModal";
 import { formatToPeso } from "../util/general.util";
 
@@ -23,7 +23,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
   const columns: Column[] = [
     {
       key: item.key,
-      value: keyLabelMapper(item.key).substring(0, item.key.length),
+      value: removePluralText(keyLabelMapper(item.key)),
     },
     {
       key: item.key,

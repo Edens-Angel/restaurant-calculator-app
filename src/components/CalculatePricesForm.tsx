@@ -1,4 +1,9 @@
-import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  ScrollView,
+} from "react-native";
 import React, { useContext } from "react";
 import CTextInput from "./CTextInput";
 import OutputValue from "./OutputValue";
@@ -16,7 +21,7 @@ const CalculatePricesForm = (): JSX.Element => {
           <View key={key} style={styles.calculateItemView}>
             <CTextInput
               viewStyle={styles.viewStyle}
-              inputStyle={styles.textStyle}
+              inputStyle={styles.inputStyle}
               label={keyLabelMapper(key)}
               placeholder={"0"}
               onChange={(e) =>
@@ -40,9 +45,9 @@ const CalculatePricesForm = (): JSX.Element => {
 
 const styles = StyleSheet.create({
   viewStyle: {
-    padding: 10,
+    padding: 4,
   },
-  textStyle: { width: 150, marginTop: 6 },
+  inputStyle: { height: 0, width: 150 },
   calculateItemView: {
     flexDirection: "row",
     justifyContent: "space-between",
